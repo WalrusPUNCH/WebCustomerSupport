@@ -1,0 +1,36 @@
+﻿@model WebApplication1.Models.SpecialistViewModel
+
+@{
+    ViewData["Title"] = "Редагування спеціаліста";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Редагування спеціаліста</h1>
+
+<h4>Спеціаліст</h4>
+<hr />
+@using (Html.BeginForm("EditSpecialist", "Admin", FormMethod.Post))
+{
+    <fieldset>
+        @Html.HiddenFor(item => item.Id)
+        <p>
+            @Html.LabelFor(item => item.Name, "Ім'я")
+            <br />
+            @Html.EditorFor(item => item.Name)
+        </p>
+        <p>
+            @Html.LabelFor(item => item.Surname, "Автор")
+            <br />
+            @Html.EditorFor(item => item.Surname)
+        </p>
+        <p>
+            @Html.HiddenFor(item => item.NumberOfProcessedRequests)          
+        </p>        
+        <p><input type="submit" value="Підтвердити" /></p>
+    </fieldset>
+}
+
+<div>
+    <a asp-action="Specialists">Назад</a>
+</div>
+

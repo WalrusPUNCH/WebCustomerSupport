@@ -1,0 +1,65 @@
+﻿@model IEnumerable<SpecialistViewModel>
+@{
+    ViewData["Title"] = "Спеціалісти компанії";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1 align="center">Спеціалісти служби підтримки</h1>
+<br />
+<p>
+    <a asp-action="AddSpecialist">Додати нового спеціаліста</a>
+</p>
+<br />
+<br />
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Surname)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NumberOfProcessedRequests)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ActiveRequestsInformation)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@if (Model != null)
+{
+    foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Surname)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NumberOfProcessedRequests)
+            </td>
+            <td style="white-space:pre-line"}>
+                    @Html.DisplayFor(modelItem => item.ActiveRequestsInformation)
+            </td>
+            <td>
+                @Html.ActionLink("Редагувати", "EditSpecialist", new { id = item.Id}) |
+                @Html.ActionLink("Видалити", "DeleteSpecialist", new { id = item.Id })
+
+            </td>
+        </tr>
+    }        
+}
+    </tbody>
+</table>

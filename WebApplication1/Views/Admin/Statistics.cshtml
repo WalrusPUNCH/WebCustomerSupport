@@ -1,0 +1,62 @@
+﻿@model WebApplication1.Models.StatisticsViewModel
+@{
+    ViewData["Title"] = "Статистика";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1 align="center">Статистика</h1>
+
+<h2 align="center">Вільні спеціалісти</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                #
+            </th>
+            <th>
+                Ім&prime;я
+            </th>
+            <th>
+                Прізвище
+            </th>
+            <th>
+                Кількість оброблених заявок
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (SpecialistViewModel specialist in Model.FreeSpecialists)
+        {
+            <tr><td>@specialist.Id</td><td>@specialist.Name</td><td>@specialist.Surname</td><td>@specialist.NumberOfProcessedRequests</td></tr>
+        }
+    </tbody>
+</table>
+
+<br />
+<br />
+
+<h2 align="center">Спеціалісти з кількістю оброблених заявок вище середенього</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                #
+            </th>
+            <th>
+                Ім&prime;я
+            </th>
+            <th>
+                Прізвище
+            </th>
+            <th>
+                Кількість оброблених заявок
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (SpecialistViewModel specialist in Model.SpecialistsAboveAverage)
+        {
+            <tr><td>@specialist.Id</td><td>@specialist.Name</td><td>@specialist.Surname</td><td>@specialist.NumberOfProcessedRequests</td></tr>
+        }
+    </tbody>
+</table>

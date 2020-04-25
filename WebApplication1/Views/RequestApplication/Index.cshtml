@@ -1,0 +1,24 @@
+﻿
+@{
+    ViewData["Title"] = "Сервісний центр";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1 align="center">Welcome</h1>
+<br />
+<br />
+<br />
+
+@Html.ActionLink("Подати заявку", "Create")
+<br />
+
+<h2 align="center">Переглянути існуючу заявку</h2>
+
+@using (Html.BeginForm("Details", "RequestApplication", FormMethod.Post))
+{
+    <p>Введіть номер вашої заявки: </p>
+    @Html.TextBox("id", "")
+    <p>
+        <input type="submit" value="Пошук" />
+    </p>
+}

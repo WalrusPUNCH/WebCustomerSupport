@@ -1,0 +1,55 @@
+﻿@model WebApplication1.Models.RequestDetailsViewModel
+
+@{
+    ViewData["Title"] = "Деталі заявки";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<br />
+<h1 align="center">Ваша заявка</h1>
+<br />
+
+<div>
+    <h4 align="center">Деталі</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Id)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Id)
+            <br />
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Subject)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Subject)
+            <br />
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ApplicationDate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ApplicationDate)
+            <br />
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Status)
+            <br />
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Specialist)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Specialist)
+            <br />
+        </dd>
+    </dl>
+</div>
+<br />
+<div>
+    <a asp-action="Index">Назад</a>
+</div>

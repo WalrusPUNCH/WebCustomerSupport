@@ -1,0 +1,36 @@
+﻿@model WebApplication1.Models.RequestViewModel
+
+@{
+    ViewData["Title"] = "Подача заявки";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<br />
+<h1 align="center">Cтворення заявки</h1>
+<br />
+<br />
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Subject" class="control-label"></label>
+                <input asp-for="Subject" class="form-control" />
+                <span asp-validation-for="Subject" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="InitMessage.Text" class="control-label"></label>
+                <input asp-for="InitMessage.Text" class="form-control" />
+                <span asp-validation-for="InitMessage.Text" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Відправити" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Назад</a>
+</div>
+

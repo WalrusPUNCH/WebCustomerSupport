@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\20200423184720_Initial.cs" />
+    <Compile Remove="Migrations\20200423184720_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20200423203940_AddedEntitiesConfiguration.cs" />
+    <Compile Remove="Migrations\20200423203940_AddedEntitiesConfiguration.Designer.cs" />
+    <Compile Remove="Migrations\20200423211318_TestMigration.cs" />
+    <Compile Remove="Migrations\20200423211318_TestMigration.Designer.cs" />
+    <Compile Remove="Migrations\20200423225223_OneToManyFix.cs" />
+    <Compile Remove="Migrations\20200423225223_OneToManyFix.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CustomerSupport.DAL.Abstract\CustomerSupport.DAL.Abstract.csproj" />
+    <ProjectReference Include="..\CustomerSupport.DAL.Entities\CustomerSupport.DAL.Entities.csproj" />
+  </ItemGroup>
+
+</Project>
