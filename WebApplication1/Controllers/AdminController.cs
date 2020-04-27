@@ -87,7 +87,6 @@ namespace WebApplication1.Controllers
             }
         }
         #endregion
-
         #region Specialists CRUD
         [HttpGet]
         public IActionResult Specialists()

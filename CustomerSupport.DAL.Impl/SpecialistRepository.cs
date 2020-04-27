@@ -23,7 +23,7 @@ namespace CustomerSupport.DAL.Impl
         }
         public Specialist GetById(int id)
         {
-            Specialist specialist = context.Specialists.Include("ActiveRequests").Where(spec => spec.Id == id).First();
+            Specialist specialist = context.Specialists.Include("ActiveRequests").AsNoTracking().Where(spec => spec.Id == id).First();
             if (specialist != null)
                 return specialist;
             else
@@ -31,22 +31,28 @@ namespace CustomerSupport.DAL.Impl
         }
         public IEnumerable<Specialist> GetAll()
         {
-            var specialists = context.Specialists.Include("ActiveRequests");
+            var specialists = context.Specialists.Include("ActiveRequests").AsNoTracking();
             return specialists;
         }
         public void Update(Specialist specialist)
         {
             // WILL IT WORK ?
-            context.Entry<Specialist>(specialist).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            //context.Entry<Specialist>(specialist).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
             //context.Specialists.Find(specialist.Id) = specialist;
+            context.Specialists.Update(specialist);
+            //context.Entry<Specialist>(specialist).State = EntityState.Detached;
+
         }
         public bool Delete(int id)
         {
-            Specialist specialist = context.Specialists.Include("ActiveRequests").Where(spec => spec.Id == id).First();
+            Specialist specialist = context.Specialists.Include("ActiveRequests").AsNoTracking().Where(spec => spec.Id == id).First();
             if (specialist != null)
             {
                 foreach (Request request in specialist.ActiveRequests)
+                {
                     request.Status = Status.Queued;
+                    context.Requests.Update(request);
+                }
                 context.Specialists.Remove(specialist);
                 return true;
             }
@@ -58,7 +64,7 @@ namespace CustomerSupport.DAL.Impl
             if (context.Specialists.Count() == 0)
                 return null;
             double averageAmount = context.Specialists.Average(spec => spec.NumberOfProcessedRequests);
-            IEnumerable<Specialist> specialists = context.Specialists.Where(spec => spec.NumberOfProcessedRequests > averageAmount).ToList();
+            IEnumerable<Specialist> specialists = context.Specialists.AsNoTracking().Where(spec => spec.NumberOfProcessedRequests > averageAmount).ToList();
             return specialists;
         }
 
@@ -66,15 +72,14 @@ namespace CustomerSupport.DAL.Impl
         {
             if (context.Specialists.Count() == 0)
                 return null;
-            IEnumerable<Specialist> specialists = context.Specialists.Where(spec => spec.ActiveRequests.Count == 0).ToList();
+            IEnumerable<Specialist> specialists = context.Specialists.AsNoTracking().Where(spec => spec.ActiveRequests.Count == 0).ToList();
             return specialists;
         }
         public Specialist GetTheLeastBusySpecialist()
         {
             if (context.Specialists.Count() == 0)
                 return null;
-            return context.Specialists.OrderBy(item => item.ActiveRequests.Count).ThenBy(item => item.NumberOfProcessedRequests).First();
+            return context.Specialists.AsNoTracking().OrderBy(item => item.ActiveRequests.Count).ThenBy(item => item.NumberOfProcessedRequests).First();
         }
-
     }
 }

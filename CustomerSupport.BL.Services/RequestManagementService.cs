@@ -31,13 +31,11 @@ namespace CustomerSupport.BL.Services
             if (spec != null)
             {
                 request.Status = StatusModel.Processing;
-                unitOfWork.Specialists.GetById(spec.Id).ActiveRequests.Add(mapper.Map<Request>(request));
+                request.Specialist = spec;
+                spec.ActiveRequests.Add(request);
             }
 
-           // request.Specialist.ActiveRequests.Add(request);
-
-            // unitOfWork.RequestsRepository.Insert(mapper.Map<Request>(request));
-           // unitOfWork.SpecialistsRepository.Update(mapper.Map<Specialist>(request.Specialist));
+            unitOfWork.Specialists.Update(mapper.Map<Specialist>(spec));
             unitOfWork.Save();
             request.Id = unitOfWork.Requests.GetAll().Last().Id;
             return request.Id;
@@ -61,38 +59,13 @@ namespace CustomerSupport.BL.Services
 
         public void Update(RequestDTO request)
         {
-            RequestDTO DBrequest = mapper.Map<RequestDTO>(unitOfWork.Requests.GetById(request.Id));
-            if (DBrequest.Specialist == null && request.Specialist != null)
+            if (request.Specialist != null)
             {
-                SpecialistDTO spec = mapper.Map<SpecialistDTO>(unitOfWork.Specialists.GetById(request.Specialist.Id));
-               // spec.ActiveRequests.Add(request);
-                unitOfWork.Specialists.GetById(spec.Id).ActiveRequests.Add(mapper.Map<Request>(request));
+                request.Specialist = mapper.Map<SpecialistDTO>(unitOfWork.Specialists.GetById(request.Specialist.Id));             
             }
-            else if (request.Specialist == null && DBrequest.Specialist != null)
-            {
-                SpecialistDTO oldSpec = mapper.Map<SpecialistDTO>(unitOfWork.Specialists.GetById(DBrequest.Specialist.Id));
-                unitOfWork.Specialists.GetById(oldSpec.Id).ActiveRequests
-                    .Remove(unitOfWork.Specialists.GetById(oldSpec.Id).ActiveRequests.Where(req => req.Id == request.Id).First());
-            }
-            else if (DBrequest.Specialist.Id == request.Specialist.Id)
-            {
-                unitOfWork.Requests.GetById(request.Id).Status = mapper.Map<Status>(request.Status);
-            }
-            else if (DBrequest.Specialist.Id != request.Specialist.Id)
-            {
-                SpecialistDTO oldSpec = mapper.Map<SpecialistDTO>(unitOfWork.Specialists.GetById(DBrequest.Specialist.Id));
-                unitOfWork.Specialists.GetById(oldSpec.Id).ActiveRequests
-                    .Remove(unitOfWork.Specialists.GetById(oldSpec.Id).ActiveRequests.Where(req => req.Id == request.Id).First());
-
-                SpecialistDTO newSpec = mapper.Map<SpecialistDTO>(unitOfWork.Specialists.GetById(request.Specialist.Id));
-                unitOfWork.Specialists.GetById(newSpec.Id).ActiveRequests
-                    .Add(mapper.Map<Request>(request));
-            }
-
-            unitOfWork.Save();
-            // request.Specialist = spec;
-            //unitOfWork.Requests.Update(mapper.Map<Request>(request));
-            //unitOfWork.Specialists.Update(mapper.Map<Specialist>(spec));
+           
+            unitOfWork.Requests.Update(mapper.Map<Request>(request));
+            unitOfWork.Save();          
         }
     }
 }
