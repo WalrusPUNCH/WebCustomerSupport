@@ -31,13 +31,13 @@ namespace CustomerSupport.DAL.Impl
 
         public IEnumerable<Request> GetAll()
         {
-            var requests = context.Requests.Include("Specialist").Include("Messages").AsNoTracking().ToList();
+            var requests = context.Requests.Include(r => r.Specialist).Include(r => r.Messages).AsNoTracking().ToList();
             return requests;
         }
 
         public Request GetById(int id)
         {
-            Request request = context.Requests.Include("Specialist").Include("Messages").AsNoTracking().Where(req => req.Id == id).FirstOrDefault();
+            Request request = context.Requests.Include(r => r.Specialist).Include(r => r.Messages).AsNoTracking().Where(req => req.Id == id).FirstOrDefault();
             if (request != null)
                 return request;
             else

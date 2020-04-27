@@ -23,7 +23,7 @@ namespace CustomerSupport.DAL.Impl
         }
         public Specialist GetById(int id)
         {
-            Specialist specialist = context.Specialists.Include("ActiveRequests").AsNoTracking().Where(spec => spec.Id == id).First();
+            Specialist specialist = context.Specialists.Include(s => s.ActiveRequests).AsNoTracking().Where(spec => spec.Id == id).First();
             if (specialist != null)
                 return specialist;
             else
@@ -31,21 +31,16 @@ namespace CustomerSupport.DAL.Impl
         }
         public IEnumerable<Specialist> GetAll()
         {
-            var specialists = context.Specialists.Include("ActiveRequests").AsNoTracking();
+            var specialists = context.Specialists.Include(s => s.ActiveRequests).AsNoTracking();
             return specialists;
         }
         public void Update(Specialist specialist)
         {
-            // WILL IT WORK ?
-            //context.Entry<Specialist>(specialist).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-            //context.Specialists.Find(specialist.Id) = specialist;
             context.Specialists.Update(specialist);
-            //context.Entry<Specialist>(specialist).State = EntityState.Detached;
-
         }
         public bool Delete(int id)
         {
-            Specialist specialist = context.Specialists.Include("ActiveRequests").AsNoTracking().Where(spec => spec.Id == id).First();
+            Specialist specialist = context.Specialists.Include(s => s.ActiveRequests).AsNoTracking().Where(spec => spec.Id == id).First();
             if (specialist != null)
             {
                 foreach (Request request in specialist.ActiveRequests)
