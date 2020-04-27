@@ -28,13 +28,6 @@ namespace CustomerSupport.DAL.Impl
             modelBuilder.Entity<Specialist>(SpecialistConfigure);
             modelBuilder.Entity<Request>(RequestConfigure);
             modelBuilder.Entity<Message>(MessageConfigure);
-
-            //modelBuilder.Entity<Specialist>().HasData(
-            //    new Specialist[]
-            //    {
-            //    new Specialist() { Name="Vadym", Surname="Mulish", NumberOfProcessedRequests=1},
-            //    new Specialist() {Name="nigel", Surname="mansell", NumberOfProcessedRequests=2}
-            //    });
         }
 
         public void SpecialistConfigure(EntityTypeBuilder<Specialist> builder)

@@ -14,9 +14,16 @@ namespace WebApplication1.Models
         public string Name { get; set; }
         [Display(Name = "Прізвище")]
         public string Surname { get; set; }
+        [Display(Name = "Спеціаліст")]
+        public string FullName { get => Name + " " + Surname; }
         [Display(Name = "Оброблені заявки")]
         public int NumberOfProcessedRequests { get; set; }
         [Display(Name = "Коротка інформація")]
         public string ActiveRequestsInformation { get; set; }
+
+        public override string ToString()
+        {
+            return Name + " " + Surname;
+        }
     }
 }

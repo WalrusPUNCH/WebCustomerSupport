@@ -23,7 +23,7 @@ namespace CustomerSupport.DAL.Impl
         }
         public Specialist GetById(int id)
         {
-            Specialist specialist = context.Specialists.Find(id);
+            Specialist specialist = context.Specialists.Include("ActiveRequests").Where(spec => spec.Id == id).First();
             if (specialist != null)
                 return specialist;
             else

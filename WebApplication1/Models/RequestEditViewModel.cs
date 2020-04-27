@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace WebApplication1.Models
 {
-    public class RequestDetailsViewModel
+    public class RequestEditViewModel
     {
         [Display(Name = "Номер")]
         public int Id { get; set; }
@@ -18,13 +18,7 @@ namespace WebApplication1.Models
         [Display(Name = "Статус заявки")]
         public StatusEnum Status { get; set; }
         [Display(Name = "Відповідальний спеціаліст")]
-        public SpecialistViewModel Specialist { get; set; }
-        [Display(Name = "Повідомлення")]
-        public ICollection<MessageViewModel> Messages { get; set; }
-
-        public RequestDetailsViewModel()
-        {
-            Messages = new List<MessageViewModel>();
-        }
+        public SpecialistViewModel Specialist { get; set; }       
+        public IEnumerable<SpecialistViewModel> AvailableSpecialists { get; set; }
     }
 }

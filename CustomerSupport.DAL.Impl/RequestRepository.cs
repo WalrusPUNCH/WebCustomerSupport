@@ -31,13 +31,13 @@ namespace CustomerSupport.DAL.Impl
 
         public IEnumerable<Request> GetAll()
         {
-            var requests = context.Requests.Include("Specialist");
+            var requests = context.Requests.Include("Specialist").Include("Messages");
             return requests;
         }
 
         public Request GetById(int id)
         {
-            Request request = context.Requests.Include("Specialist").Where(req => req.Id == id).FirstOrDefault();
+            Request request = context.Requests.Include("Specialist").Include("Messages").Where(req => req.Id == id).FirstOrDefault();
             if (request != null)
                 return request;
             else
@@ -52,7 +52,8 @@ namespace CustomerSupport.DAL.Impl
         public void Update(Request request)
         {
             // WILL IT WORK ?
-            context.Entry<Request>(request).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            context.Entry<Request>(request).State = EntityState.Modified;
+            
         }
     }
 }

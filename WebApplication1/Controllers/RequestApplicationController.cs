@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+
 
 using AutoMapper;
 
@@ -48,7 +50,10 @@ namespace WebApplication1.Controllers
         [HttpPost]
         public ActionResult Create(RequestViewModel requestVM)
         {
-            requestService.CreateRequest(mapper.Map<RequestDTO>(requestVM));
+            int requestId = requestService.CreateRequest(mapper.Map<RequestDTO>(requestVM));
+
+            //await Response.WriteAsync($"<script language='javascript'>window.alert('Your request ID is  {requestId}');</script>");
+
             return RedirectToAction(nameof(Index));
         }
 

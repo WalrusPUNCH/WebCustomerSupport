@@ -44,14 +44,23 @@
                 @Html.DisplayFor(modelItem => item.Status)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Specialist)
+            @if (item.Specialist != null)
+            {
+                @item.Specialist.ToString()
+            }
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                @if (item.Status == StatusEnum.Processed)
+                {
+                    @Html.ActionLink("Details", "DetailsRequest", new { id = item.Id })
+                }
+                
+                else
+                    @Html.ActionLink("Edit", "EditRequest", new { id = item.Id })
+                |
+                @Html.ActionLink("Delete", "DeleteRequest", new { id = item.Id })
             </td>
-        </tr>
+            </tr>
 }
     </tbody>
 </table>
