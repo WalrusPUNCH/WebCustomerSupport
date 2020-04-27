@@ -31,7 +31,7 @@ namespace CustomerSupport.DAL.Impl
         }
         public IEnumerable<Specialist> GetAll()
         {
-            var specialists = context.Specialists.Include(s => s.ActiveRequests).AsNoTracking();
+            var specialists = context.Specialists.Include(s => s.ActiveRequests).AsNoTracking().ToList();
             return specialists;
         }
         public void Update(Specialist specialist)
