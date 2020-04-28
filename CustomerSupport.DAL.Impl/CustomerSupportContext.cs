@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.Extensions.Logging;
 
 using CustomerSupport.DAL.Entities;
 
@@ -13,15 +14,15 @@ namespace CustomerSupport.DAL.Impl
         public DbSet<Request> Requests { get; set; }
         public DbSet<Specialist> Specialists { get; set; }
 
+        public static readonly ILoggerFactory MyLoggerFactory = LoggerFactory.Create(builder => { builder.AddConsole(); });
+
         public CustomerSupportContext(DbContextOptions<CustomerSupportContext> options) : base(options)
         {
            // Database.EnsureCreated();
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-
-        }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) => optionsBuilder
+        .UseLoggerFactory(MyLoggerFactory);
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -37,7 +37,7 @@ namespace CustomerSupport.DAL.Impl
 
         public Request GetById(int id)
         {
-            Request request = context.Requests.Include(r => r.Specialist).Include(r => r.Messages).AsNoTracking().Where(req => req.Id == id).FirstOrDefault();
+            Request request = context.Requests.Where(req => req.Id == id).Include(r => r.Specialist).Include(r => r.Messages).AsNoTracking().FirstOrDefault();
             if (request != null)
                 return request;
             else
