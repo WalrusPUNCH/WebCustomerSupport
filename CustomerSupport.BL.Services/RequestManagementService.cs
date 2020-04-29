@@ -61,8 +61,11 @@ namespace CustomerSupport.BL.Services
         {
             if (request.Specialist != null)
             {
-                request.Specialist = mapper.Map<SpecialistDTO>(unitOfWork.Specialists.GetById(request.Specialist.Id));             
+                request.Specialist = mapper.Map<SpecialistDTO>(unitOfWork.Specialists.GetByIdSlim(request.Specialist.Id));
+                if (request.Status == StatusModel.Processed)
+                    request.Specialist.NumberOfProcessedRequests++;
             }
+
            
             unitOfWork.Requests.Update(mapper.Map<Request>(request));
             unitOfWork.Save();          

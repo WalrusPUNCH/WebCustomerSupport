@@ -43,6 +43,14 @@ namespace CustomerSupport.DAL.Impl
             else
                 return null;         
         }
+        public Request GetByIdSlim(int id)
+        {
+            Request request = context.Requests.Where(req => req.Id == id).AsNoTracking().FirstOrDefault();
+            if (request != null)
+                return request;
+            else
+                return null;
+        }
 
         public void Create(Request request)
         {
@@ -54,5 +62,6 @@ namespace CustomerSupport.DAL.Impl
             context.Requests.Update(request);
         }
 
+        
     }
 }

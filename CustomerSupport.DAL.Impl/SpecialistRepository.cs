@@ -29,6 +29,15 @@ namespace CustomerSupport.DAL.Impl
             else
                 return null;
         }
+
+        public Specialist GetByIdSlim(int id)
+        {
+            Specialist specialist = context.Specialists.AsNoTracking().Where(spec => spec.Id == id).First();
+            if (specialist != null)
+                return specialist;
+            else
+                return null;
+        }
         public IEnumerable<Specialist> GetAll()
         {
             var specialists = context.Specialists.Include(s => s.ActiveRequests).AsNoTracking().ToList();
@@ -76,5 +85,6 @@ namespace CustomerSupport.DAL.Impl
                 return null;
             return context.Specialists.AsNoTracking().OrderBy(item => item.ActiveRequests.Count).ThenBy(item => item.NumberOfProcessedRequests).First();
         }
+
     }
 }
