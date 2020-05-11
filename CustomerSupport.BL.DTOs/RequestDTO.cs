@@ -10,7 +10,7 @@ namespace CustomerSupport.BL.DTOs
         public DateTime ApplicationDate { get; set; }
         public StatusModel Status { get; set; }
         //public int? SpecialistId { get; set; }
-        public SpecialistDTO Specialist { get; set; }
+        public SpecialistSlim Specialist { get; set; }
         public ICollection<MessageDTO> Messages { get; set; }
 
         public RequestDTO()

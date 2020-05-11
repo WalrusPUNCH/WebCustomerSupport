@@ -26,9 +26,11 @@ namespace WebApplication1.Mapper
             /// BL-PL Specialist mappers
             RegisterMapping<SpecialistDTO, SpecialistSelectListViewModel>(Map_SpecialistDTO_SpecialistSelectListViewModel);
             RegisterMapping<SpecialistDTO, SpecialistViewModel>(Map_SpecialistDTO_SpecialistViewModel);
+            RegisterMapping<SpecialistSlim, SpecialistViewModel>(Map_SpecialistSlim_SpecialistViewModel);
+
             /// PL-BL Specialist mappers
             RegisterMapping<SpecialistViewModel, SpecialistDTO>(Map_SpecialistViewModel_SpecialistDTO);
-
+            RegisterMapping<SpecialistViewModel, SpecialistSlim>(Map_SpecialistViewModel_SpecialistSlim);
 
             /// BL-PL Requests mappers
             RegisterMapping<RequestDTO, RequestDetailsViewModel>(Map_RequestDTO_RequestDetailsViewModel);
@@ -90,8 +92,20 @@ namespace WebApplication1.Mapper
                 NumberOfProcessedRequests = sourceItem.NumberOfProcessedRequests
             };
         }
+
+        private SpecialistViewModel Map_SpecialistSlim_SpecialistViewModel(SpecialistSlim sourceItem)
+        {
+            SpecialistViewModel specialistView = new SpecialistViewModel()
+            {
+                Id = sourceItem.Id,
+                Name = sourceItem.Name,
+                Surname = sourceItem.Surname,
+                NumberOfProcessedRequests = sourceItem.NumberOfProcessedRequests
+            };
+            return specialistView;
+        }
         #endregion
-        #region PL-BL SpecialistMappers
+        #region PL-BL Specialist Mappers
         private SpecialistDTO Map_SpecialistViewModel_SpecialistDTO(SpecialistViewModel sourceItem)
         {
             return new SpecialistDTO()
@@ -102,6 +116,18 @@ namespace WebApplication1.Mapper
                 Surname = sourceItem.Surname,
                 NumberOfProcessedRequests = sourceItem.NumberOfProcessedRequests
             };
+        }
+
+        private SpecialistSlim Map_SpecialistViewModel_SpecialistSlim(SpecialistViewModel sourceItem)
+        {
+            SpecialistSlim specialist = new SpecialistSlim()
+            {
+                Id = sourceItem.Id,
+                Name = sourceItem.Name,
+                Surname = sourceItem.Surname,
+                NumberOfProcessedRequests = sourceItem.NumberOfProcessedRequests
+            };
+            return specialist;
         }
         #endregion
 
@@ -135,6 +161,7 @@ namespace WebApplication1.Mapper
                 Subject = sourceItem.Subject
             };
         }
+
         #endregion
         #region PL-BL Requests Mappers
 
@@ -145,7 +172,7 @@ namespace WebApplication1.Mapper
                 ApplicationDate = sourceItem.ApplicationDate,
                 Id = sourceItem.Id,
                 Messages = null,
-                Specialist = MapOne<SpecialistDTO>(sourceItem.Specialist),
+                Specialist = MapOne<SpecialistSlim>(sourceItem.Specialist),
                 Status = (StatusModel)sourceItem.Status,
                 Subject = sourceItem.Subject
             };

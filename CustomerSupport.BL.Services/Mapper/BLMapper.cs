@@ -24,6 +24,7 @@ namespace CustomerSupport.BL.Services.Mapper
             RegisterMapping<SpecialistDTO, Specialist>(Map_SpecialistDTO_Specialist);
             /// DAL-BL Specialist mappers
             RegisterMapping<Specialist, SpecialistDTO>(Map_Specialist_SpecialistDTO);
+            RegisterMapping<Specialist, SpecialistSlim>(Map_Specialist_SpecialistSlim);
 
             /// BL-DAL Requests mappers
 
@@ -56,7 +57,7 @@ namespace CustomerSupport.BL.Services.Mapper
                 Id = request.Id,
                 Messages = MapMany<MessageDTO>(request.Messages).ToList(),
 
-                             // Specialist = MapOne<SpecialistDTO>(request.Specialist),
+                Specialist = MapOne<SpecialistSlim>(request.Specialist),
                 Status = (StatusModel)request.Status,
                 Subject = request.Subject
             };
@@ -78,6 +79,18 @@ namespace CustomerSupport.BL.Services.Mapper
                 NumberOfProcessedRequests = specialist.NumberOfProcessedRequests
             };
             return specialistDTO;
+        }
+
+        private SpecialistSlim Map_Specialist_SpecialistSlim(Specialist specialist)
+        {
+            SpecialistSlim specialistSlim = new SpecialistSlim()
+            {
+                Id = specialist.Id,
+                Name = specialist.Name,
+                Surname = specialist.Surname,
+                NumberOfProcessedRequests = specialist.NumberOfProcessedRequests
+            };
+            return specialistSlim;
         }
         #endregion
         #region BL-DAL Specialist Mappers
