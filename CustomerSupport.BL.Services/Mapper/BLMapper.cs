@@ -27,7 +27,7 @@ namespace CustomerSupport.BL.Services.Mapper
             RegisterMapping<Specialist, SpecialistSlim>(Map_Specialist_SpecialistSlim);
 
             /// BL-DAL Requests mappers
-
+            RegisterMapping<RequestDTO, Request>(Map_RequestDTO_Request);
             /// DAL-BL Requests mappers
             RegisterMapping<Request, RequestDTO>(Map_Request_RequestDTO);
         }
@@ -56,15 +56,31 @@ namespace CustomerSupport.BL.Services.Mapper
                 ApplicationDate = request.ApplicationDate,
                 Id = request.Id,
                 Messages = MapMany<MessageDTO>(request.Messages).ToList(),
-
-                Specialist = MapOne<SpecialistSlim>(request.Specialist),
                 Status = (StatusModel)request.Status,
                 Subject = request.Subject
             };
+            if (request.Specialist != null)
+                requestDTO.Specialist = MapOne<SpecialistSlim>(request.Specialist);
+
             return requestDTO;
         }
         #endregion
         #region BL-DAL Request Mappers
+        private Request Map_RequestDTO_Request(RequestDTO requestDTO)
+        {
+            Request request = new Request()
+            {
+                Id = requestDTO.Id,
+                ApplicationDate = requestDTO.ApplicationDate,
+                SpecialistId = requestDTO.SpecialistId,
+                Status = (Status)requestDTO.Status,
+                Subject = requestDTO.Subject
+            };
+            if (requestDTO.Messages != null && request.Messages.Count != 0)
+                request.Messages = MapMany<Message>(requestDTO.Messages).ToList();
+
+            return request;
+        }
         #endregion
 
         #region DAL-BL Specialist Mappers
@@ -99,11 +115,12 @@ namespace CustomerSupport.BL.Services.Mapper
             Specialist specialist = new Specialist()
             {
                 Id = specialistDTO.Id,
-                ActiveRequests = MapMany<Request>(specialistDTO.ActiveRequests).ToList(),
                 Name = specialistDTO.Name,
                 Surname = specialistDTO.Surname,
                 NumberOfProcessedRequests = specialistDTO.NumberOfProcessedRequests
             };
+            if (specialistDTO.ActiveRequests != null && specialistDTO.ActiveRequests.Count != 0)
+                specialist.ActiveRequests = MapMany<Request>(specialistDTO.ActiveRequests).ToList();
             return specialist;
         }
         #endregion

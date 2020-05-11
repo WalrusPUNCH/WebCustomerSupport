@@ -18,7 +18,8 @@ namespace WebApplication1.Models
         [Display(Name = "Статус заявки")]
         public StatusEnum Status { get; set; }
         [Display(Name = "Відповідальний спеціаліст")]
-        public SpecialistViewModel Specialist { get; set; }       
+       // public SpecialistViewModel Specialist { get; set; }   
+        public int? SpecialistId { get; set; }
         public IEnumerable<SpecialistViewModel> AvailableSpecialists { get; set; }
     }
 }

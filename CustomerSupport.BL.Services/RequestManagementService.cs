@@ -62,6 +62,8 @@ namespace CustomerSupport.BL.Services
         public void Update(RequestDTO editedRequest)
         {          
             unitOfWork.Requests.Update(customMapper.MapOne<Request>(editedRequest));
+            if (editedRequest.SpecialistId != null && editedRequest.Status == StatusModel.Processed)
+                unitOfWork.Specialists.FindByID((int)editedRequest.SpecialistId).NumberOfProcessedRequests++;
             unitOfWork.Save();      
         }
 

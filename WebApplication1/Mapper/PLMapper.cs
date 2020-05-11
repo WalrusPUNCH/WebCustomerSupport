@@ -151,15 +151,19 @@ namespace WebApplication1.Mapper
 
         private RequestEditViewModel Map_RequestDTO_RequestEditViewModel(RequestDTO sourceItem)
         {
-            return new RequestEditViewModel()
-            {
+            RequestEditViewModel requestEditView = new RequestEditViewModel()
+            { 
                 Id = sourceItem.Id,
                 ApplicationDate = sourceItem.ApplicationDate,
-                //Specialist = Map<SpecialistViewModel>(sourceItem.Specialist),
+               // Specialist = Map<SpecialistViewModel>(sourceItem.Specialist),
                 AvailableSpecialists = new List<SpecialistViewModel>(),
                 Status = (StatusEnum)sourceItem.Status,
                 Subject = sourceItem.Subject
             };
+            if (sourceItem.Specialist != null)
+                requestEditView.SpecialistId = sourceItem.Specialist.Id;
+            return requestEditView;
+
         }
 
         #endregion
@@ -172,7 +176,7 @@ namespace WebApplication1.Mapper
                 ApplicationDate = sourceItem.ApplicationDate,
                 Id = sourceItem.Id,
                 Messages = null,
-                Specialist = MapOne<SpecialistSlim>(sourceItem.Specialist),
+                SpecialistId = sourceItem.SpecialistId,// MapOne<SpecialistSlim>(sourceItem.Specialist),
                 Status = (StatusModel)sourceItem.Status,
                 Subject = sourceItem.Subject
             };
