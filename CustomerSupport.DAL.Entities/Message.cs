@@ -6,5 +6,6 @@ namespace CustomerSupport.DAL.Entities
     {
         public string Text { get; set; }
         public DateTime ApplicationDate { get; set; }
+        public int RequestId { get; set; }
     }
 }

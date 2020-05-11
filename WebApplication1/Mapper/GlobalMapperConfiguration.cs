@@ -6,6 +6,8 @@ using Microsoft.Extensions.DependencyInjection;
 
 using AutoMapper;
 using CustomerSupport.BL.Configuration;
+using CustomerSupport.Core.Mapper;
+using WebApplication1.Mapper.Abstract;
 
 namespace WebApplication1.Mapper
 {
@@ -24,5 +26,11 @@ namespace WebApplication1.Mapper
             return services;
 
         }
+
+        public static IServiceCollection ConfigureCustomMapper(this IServiceCollection services)
+        {
+            return services.AddSingleton<IPLMapper, PLMapper>();
+        }
     }
+
 }

@@ -18,6 +18,7 @@
     <ProjectReference Include="..\CustomerSupport.BL.Abstract\CustomerSupport.BL.Abstract.csproj" />
     <ProjectReference Include="..\CustomerSupport.BL.Configuration\CustomerSupport.BL.Configuration.csproj" />
     <ProjectReference Include="..\CustomerSupport.BL.DTOs\CustomerSupport.BL.DTOs.csproj" />
+    <ProjectReference Include="..\CustomerSupport.Core.Mapper\CustomerSupport.Core.Mapper.csproj" />
     <ProjectReference Include="..\CustomerSupport.DAL.Abstract\CustomerSupport.DAL.Abstract.csproj" />
     <ProjectReference Include="..\CustomerSupport.DAL.Configuration\CustomerSupport.DAL.Configuration.csproj" />
   </ItemGroup>

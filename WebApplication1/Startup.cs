@@ -31,6 +31,7 @@ namespace WebApplication1
             services.UseDAModule();
             services.UseBLModules();
             services.ConfigureMapper();
+            services.ConfigureCustomMapper();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

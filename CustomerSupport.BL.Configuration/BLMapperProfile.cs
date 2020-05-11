@@ -8,6 +8,8 @@ using AutoMapper;
 
 using CustomerSupport.DAL.Entities;
 using CustomerSupport.BL.DTOs;
+using CustomerSupport.Core.Mapper;
+
 
 
 namespace CustomerSupport.BL.Configuration
@@ -25,7 +27,7 @@ namespace CustomerSupport.BL.Configuration
             //CreateMap<Request, RequestDTO>().ForMember(dest => dest.Id, opt => opt.Ignore()).ReverseMap();
             //CreateMap<Specialist, SpecialistDTO>().ForMember(dest => dest.Id, opt => opt.Ignore()).ReverseMap();
             //CreateMap<Status, StatusModel>().ReverseMap();
-        }
+       }
 
     }
 }

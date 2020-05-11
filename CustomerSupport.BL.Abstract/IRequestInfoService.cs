@@ -10,6 +10,6 @@ namespace CustomerSupport.BL.Abstract
 {
     public interface IRequestInfoService
     {
-        IEnumerable<RequestDTO> GetAll();
+        IEnumerable<RequestDTO> GetAll(int page, int pageSize);
     }
 }

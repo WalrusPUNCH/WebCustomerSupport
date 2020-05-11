@@ -8,7 +8,7 @@ namespace CustomerSupport.DAL.Abstract
     public interface ISpecialistRepository : IBaseRepository<Specialist>
     {
         Specialist GetTheLeastBusySpecialist();
-        IEnumerable<Specialist> GetSpecialistsWithAmountOfRequestsAboveAvarage();
-        IEnumerable<Specialist> GetSpecialistsWithNoActiveRequests();
+        IEnumerable<Specialist> GetSpecialistsWithAmountOfRequestsAboveAvarage(); // add paging
+        IEnumerable<Specialist> GetSpecialistsWithNoActiveRequests(); // add paging
     }
 }

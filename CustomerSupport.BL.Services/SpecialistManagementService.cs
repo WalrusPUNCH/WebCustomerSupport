@@ -10,57 +10,67 @@ using CustomerSupport.DAL.Entities;
 using CustomerSupport.BL.DTOs;
 using CustomerSupport.BL.Abstract;
 using System.Linq;
+using CustomerSupport.BL.Services.Mapper.Abstract;
 
 namespace CustomerSupport.BL.Services
 {
     public class SpecialistManagementService : ISpecialistManagementService
     {
         private readonly IUnitOfWork unitOfWork;
-        private readonly IMapper mapper;
-        public SpecialistManagementService(IUnitOfWork unit, IMapper mapper)
+        // private readonly IMapper mapper;
+        private readonly IBLMapper customMapper;
+        public SpecialistManagementService(IUnitOfWork unit,
+                                           /*IMapper mapper,*/
+                                           IBLMapper customMapper)
         {
             unitOfWork = unit;
-            this.mapper = mapper;
+            this.customMapper = customMapper;
+          //  this.mapper = mapper;
         }
-
-        public bool Delete(int id)
+        public void AddSpecialist(SpecialistDTO item)
         {
-            bool isDeleted = unitOfWork.Specialists.Delete(id);
+            unitOfWork.Specialists.Add(customMapper.MapOne<Specialist>(item));
             unitOfWork.Save();
-            return isDeleted;
+
         }
 
         public SpecialistDTO GetSpecialistById(int id)
         {
-            return mapper.Map<SpecialistDTO>(unitOfWork.Specialists.GetById(id));
+            return customMapper.MapOne<SpecialistDTO>(unitOfWork.Specialists.FindByID(id));
         }
 
         public IEnumerable<SpecialistDTO> GetAll()
         {
-            return mapper.Map<IEnumerable<SpecialistDTO>>(unitOfWork.Specialists.GetAll());        
+            return customMapper.MapMany<SpecialistDTO>(unitOfWork.Specialists.GetAll());
         }
-        
-        public void AddSpecialist(SpecialistDTO item)
-        {
-            unitOfWork.Specialists.Create(mapper.Map<Specialist>(item));
-            unitOfWork.Save();
 
+        public IEnumerable<SpecialistDTO> GetAll(int page, int pageSize)
+        {
+            return customMapper.MapMany<SpecialistDTO>(unitOfWork.Specialists.GetAll(page, pageSize));        
         }
 
         public void Update(SpecialistDTO item)
         {
-            unitOfWork.Specialists.Update(mapper.Map<Specialist>(item));
+            unitOfWork.Specialists.Update(customMapper.MapOne<Specialist>(item));
             unitOfWork.Save();
         }
-
+        public void Delete(int id)
+        {
+            unitOfWork.Specialists.Delete(id);
+            unitOfWork.Save();
+        }
+        public int Count()
+        {
+            return unitOfWork.Specialists.Count();
+        }
         public IEnumerable<SpecialistDTO> GetSpecialistsWithAmountOfRequestsAboveAvarage()
         {
-            return mapper.Map<IEnumerable<SpecialistDTO>>(unitOfWork.Specialists.GetSpecialistsWithAmountOfRequestsAboveAvarage());
+            return customMapper.MapMany<SpecialistDTO>(unitOfWork.Specialists.GetSpecialistsWithAmountOfRequestsAboveAvarage());
         }
 
         public IEnumerable<SpecialistDTO> GetSpecialistsWithNoActiveRequests()
         {
-            return mapper.Map<IEnumerable<SpecialistDTO>>(unitOfWork.Specialists.GetSpecialistsWithNoActiveRequests());
+            return customMapper.MapMany<SpecialistDTO>(unitOfWork.Specialists.GetSpecialistsWithNoActiveRequests());
         }
     }
 }

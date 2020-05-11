@@ -34,9 +34,7 @@ namespace CustomerSupport.DAL.Impl
         public void SpecialistConfigure(EntityTypeBuilder<Specialist> builder)
         {
             builder.HasKey(spec => spec.Id);
-            builder.HasMany(c => c.ActiveRequests)
-                    .WithOne(e => e.Specialist)
-                    .OnDelete(DeleteBehavior.SetNull);
+            builder.HasMany(c => c.ActiveRequests);
 
             builder.Property(spec => spec.Name).IsRequired();
             builder.Property(spec => spec.Surname).IsRequired();
@@ -48,6 +46,9 @@ namespace CustomerSupport.DAL.Impl
 
             builder.Property(req => req.ApplicationDate).IsRequired();
             builder.Property(req => req.Subject).IsRequired();
+            builder.HasOne(req => req.Specialist).WithMany(spec => spec.ActiveRequests)
+                                                 .OnDelete(DeleteBehavior.SetNull)
+                                                 .HasForeignKey(req => req.SpecialistId);
         }
 
         public void MessageConfigure(EntityTypeBuilder<Message> builder)

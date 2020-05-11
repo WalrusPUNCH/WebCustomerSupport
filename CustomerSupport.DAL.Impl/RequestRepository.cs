@@ -9,59 +9,42 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CustomerSupport.DAL.Impl
 {
-    public class RequestRepository : IRequestRepository
+    public class RequestRepository : BaseRepository<Request>, IRequestRepository
     {
         private readonly CustomerSupportContext context;
-        public RequestRepository(CustomerSupportContext context)
+        public RequestRepository(CustomerSupportContext context) : base(context)
         {
             this.context = context;
         }
 
-        public bool Delete(int id)
+        public override void Update(Request updatedRequest)
         {
-            Request reqeust = GetById(id);
-            if (reqeust != null)
-            {
-                context.Requests.Remove(reqeust);
-                return true;
-            }
-            else
-                return false;
-        }
+            context.Entry(updatedRequest).State = EntityState.Modified;
 
-        public IEnumerable<Request> GetAll()
+            /*Request requestDB = FindByID(updatedRequest.Id);
+            requestDB.ApplicationDate = updatedRequest.ApplicationDate;
+            requestDB.SpecialistId = updatedRequest.SpecialistId;
+            requestDB.Status = updatedRequest.Status;
+            requestDB.Subject = updatedRequest.Subject;*/
+        }
+        public override IEnumerable<Request> GetAll(int page, int pageSize)
         {
-            var requests = context.Requests.Include(r => r.Specialist).Include(r => r.Messages).AsNoTracking().ToList();
+            return context.Requests.Include(rq => rq.Specialist).GetPaged(page, pageSize).ToList();
+        }
+        public override IEnumerable<Request> GetAll()
+        {
+            var requests = context.Requests.Include(r => r.Messages).ToList();
             return requests;
         }
 
-        public Request GetById(int id)
+        public override Request FindByID(int id)
         {
-            Request request = context.Requests.Where(req => req.Id == id).Include(r => r.Specialist).Include(r => r.Messages).AsNoTracking().FirstOrDefault();
-            if (request != null)
-                return request;
-            else
-                return null;         
-        }
-        public Request GetByIdSlim(int id)
-        {
-            Request request = context.Requests.Where(req => req.Id == id).AsNoTracking().FirstOrDefault();
-            if (request != null)
-                return request;
-            else
-                return null;
+            return context.Requests.Include(r => r.Messages).Include(r => r.Specialist).FirstOrDefault(req => req.Id == id);        
         }
 
-        public void Create(Request request)
+        public int GetLastId()
         {
-            context.Requests.Add(request);
+            return 8; // context.Requests.LastOrDefault().Id;
         }
-
-        public void Update(Request request)
-        {
-            context.Requests.Update(request);
-        }
-
-        
     }
 }

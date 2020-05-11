@@ -11,6 +11,7 @@
   <ItemGroup>
     <ProjectReference Include="..\CustomerSupport.BL.Abstract\CustomerSupport.BL.Abstract.csproj" />
     <ProjectReference Include="..\CustomerSupport.BL.Services\CustomerSupport.BL.Services.csproj" />
+    <ProjectReference Include="..\CustomerSupport.Core.Mapper\CustomerSupport.Core.Mapper.csproj" />
   </ItemGroup>
 
 </Project>

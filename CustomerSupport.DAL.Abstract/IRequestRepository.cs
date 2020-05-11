@@ -7,6 +7,6 @@ namespace CustomerSupport.DAL.Abstract
 {
     public interface IRequestRepository : IBaseRepository<Request>
     {
-
+        int GetLastId();
     }
 }

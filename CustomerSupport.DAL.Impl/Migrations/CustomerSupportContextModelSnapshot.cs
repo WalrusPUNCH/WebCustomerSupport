@@ -29,7 +29,7 @@ namespace CustomerSupport.DAL.Impl.Migrations
                     b.Property<DateTime>("ApplicationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("RequestId")
+                    b.Property<int>("RequestId")
                         .HasColumnType("int");
 
                     b.Property<string>("Text")
@@ -97,7 +97,9 @@ namespace CustomerSupport.DAL.Impl.Migrations
                 {
                     b.HasOne("CustomerSupport.DAL.Entities.Request", null)
                         .WithMany("Messages")
-                        .HasForeignKey("RequestId");
+                        .HasForeignKey("RequestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("CustomerSupport.DAL.Entities.Request", b =>

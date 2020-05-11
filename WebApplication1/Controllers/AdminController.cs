@@ -11,6 +11,10 @@ using CustomerSupport.BL.Abstract;
 using CustomerSupport.BL.DTOs;
 
 using WebApplication1.Models;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using WebApplication1.Mapper.Abstract;
+using System.Runtime.CompilerServices;
+using CustomerSupport.Core.Mapper;
 
 namespace WebApplication1.Controllers
 
@@ -19,11 +23,13 @@ namespace WebApplication1.Controllers
     {
         private readonly ISpecialistManagementService specialistManagementService;
         private readonly IRequestManagementService requestsManagementService;
-        private readonly IMapper mapper;
-        public AdminController(ISpecialistManagementService specialistManagementService, IRequestManagementService requestsManagementService, IMapper mapper)
+        private readonly IPLMapper customMapper;
+        public AdminController(ISpecialistManagementService specialistManagementService,
+                               IRequestManagementService requestsManagementService, 
+                               IPLMapper customMapper)
         {
             this.specialistManagementService = specialistManagementService;
-            this.mapper = mapper;
+            this.customMapper = customMapper;
             this.requestsManagementService = requestsManagementService;
         }
         public IActionResult Index()
@@ -32,9 +38,19 @@ namespace WebApplication1.Controllers
         }
         #region Requests  CRUD
         [HttpGet]
-        public IActionResult Requests()
+        public IActionResult Requests(int? pageSize, int page = 1)
         {
-            return View(mapper.Map<IEnumerable<RequestDetailsViewModel>>(requestsManagementService.GetAll()));
+            int _pageSize = pageSize ?? 10;
+            PagedResult<RequestDetailsViewModel> pagedResult = new PagedResult<RequestDetailsViewModel>
+            {
+                CurrentPage = page,
+                PageSize = _pageSize,
+                PageCount = (int)Math.Ceiling(requestsManagementService.Count() / (double)_pageSize),
+                Elements = customMapper.MapMany<RequestDetailsViewModel>(requestsManagementService.GetAll(page, _pageSize)).ToList()
+            };
+
+            return View(pagedResult);
+           // return View(mapper.Map<IEnumerable<RequestDetailsViewModel>>(requestsManagementService.GetAll()));
         }
         [HttpGet("/Admin/Requests/Edit/{id}")]
         public IActionResult EditRequest(int? Id)
@@ -43,10 +59,10 @@ namespace WebApplication1.Controllers
                 return RedirectToAction("Requests");
             else
             {
-                RequestEditViewModel requestDetails = mapper.Map<RequestEditViewModel>(requestsManagementService.GetById((int)Id));
+                RequestEditViewModel requestDetails = customMapper.MapOne<RequestEditViewModel>(requestsManagementService.GetById((int)Id));
                 if (requestDetails != null)
                 {
-                    requestDetails.AvailableSpecialists = mapper.Map<IEnumerable<SpecialistViewModel>>(specialistManagementService.GetAll());
+                    requestDetails.AvailableSpecialists = customMapper.MapMany<SpecialistViewModel>(specialistManagementService.GetAll());
                     return View(requestDetails);
                 }
                 else
@@ -54,9 +70,9 @@ namespace WebApplication1.Controllers
             }
         }
         [HttpPost("/Admin/Requests/Edit/{id}")]
-        public IActionResult EditRequest(RequestDetailsViewModel requestDetails)
+        public IActionResult EditRequest(RequestEditViewModel requestDetails)
         {
-            requestsManagementService.Update(mapper.Map<RequestDTO>(requestDetails));
+            requestsManagementService.Update(customMapper.MapOne<RequestDTO>(requestDetails));
             return RedirectToAction("Requests");
         }
 
@@ -79,7 +95,7 @@ namespace WebApplication1.Controllers
                 return RedirectToAction(nameof(Requests));
             else
             {
-                RequestDetailsViewModel req = mapper.Map<RequestDetailsViewModel>(requestsManagementService.GetById((int)id));
+                RequestDetailsViewModel req = customMapper.MapOne<RequestDetailsViewModel>(requestsManagementService.GetById((int)id));
                 if (req != null)
                     return View(req);
                 else
@@ -89,11 +105,20 @@ namespace WebApplication1.Controllers
         #endregion
         #region Specialists CRUD
         [HttpGet]
-        public IActionResult Specialists()
+        public IActionResult Specialists(int? pageSize, int page = 1)
         {
-            return View(mapper.Map<IEnumerable<SpecialistViewModel>>(specialistManagementService.GetAll()));
-        }
+            int _pageSize = pageSize ?? 1;
+            PagedResult<SpecialistViewModel> pagedResult = new PagedResult<SpecialistViewModel>
+            {
+                CurrentPage = page,
+                PageSize = _pageSize,
+                PageCount = (int)Math.Ceiling(specialistManagementService.Count() / (double)_pageSize),
+                Elements = customMapper.MapMany<SpecialistViewModel>(specialistManagementService.GetAll(page, _pageSize)).ToList()
+            };
 
+            return View(pagedResult);
+            //return View(mapper.Map<IEnumerable<SpecialistViewModel>>(specialistManagementService.GetAll()));
+        }
         [HttpGet("/Admin/Specialists/Add")]
         public IActionResult AddSpecialist()
         {
@@ -116,16 +141,17 @@ namespace WebApplication1.Controllers
                 Response.StatusCode = 404;
                 return null;
             }               
-            return View(mapper.Map<SpecialistViewModel>(specialistManagementService.GetSpecialistById((int)Id)));
+            return View(customMapper.MapOne<SpecialistViewModel>(specialistManagementService.GetSpecialistById((int)Id)));
         }
 
         //[HttpPost]
         [HttpPost("/Admin/Specialists/Edit/{id}")]
         public IActionResult EditSpecialist(SpecialistViewModel specialist)
         {
-            specialistManagementService.Update(mapper.Map<SpecialistDTO>(specialist));
+            specialistManagementService.Update(customMapper.MapOne<SpecialistDTO>(specialist));
             return RedirectToAction("Specialists");
         }
+
         [Route("/Admin/Specialists/Delete/{id}")]
         public IActionResult DeleteSpecialist(int? id)
         {
@@ -134,14 +160,8 @@ namespace WebApplication1.Controllers
                 Response.StatusCode = 404;
                 return null;
             }
-
-            if (specialistManagementService.Delete((int)id) == false)
-            {
-                Response.StatusCode = 404;
-                return null;
-            }
-            else
-                return RedirectToAction("Specialists");
+            specialistManagementService.Delete((int)id);
+            return RedirectToAction("Specialists");
             
         }
         #endregion
@@ -150,8 +170,8 @@ namespace WebApplication1.Controllers
         public IActionResult Statistics()
         {
             var statsVM = new StatisticsViewModel();
-            statsVM.FreeSpecialists = mapper.Map<IEnumerable<SpecialistViewModel>>(specialistManagementService.GetSpecialistsWithNoActiveRequests());
-            statsVM.SpecialistsAboveAverage = mapper.Map<IEnumerable<SpecialistViewModel>>(specialistManagementService.GetSpecialistsWithAmountOfRequestsAboveAvarage());
+            statsVM.FreeSpecialists = customMapper.MapMany<SpecialistViewModel>(specialistManagementService.GetSpecialistsWithNoActiveRequests());
+            statsVM.SpecialistsAboveAverage = customMapper.MapMany<SpecialistViewModel>(specialistManagementService.GetSpecialistsWithAmountOfRequestsAboveAvarage());
             return View(statsVM);
         }
         #endregion

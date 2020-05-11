@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CustomerSupport.DAL.Impl.Migrations
 {
     [DbContext(typeof(CustomerSupportContext))]
-    [Migration("20200424212320_ChangedSpecialistOnDeleteBehavior")]
-    partial class ChangedSpecialistOnDeleteBehavior
+    [Migration("20200511113342_ChangedNavigationPropertiesForMessageAndRequest")]
+    partial class ChangedNavigationPropertiesForMessageAndRequest
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -31,7 +31,7 @@ namespace CustomerSupport.DAL.Impl.Migrations
                     b.Property<DateTime>("ApplicationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("RequestId")
+                    b.Property<int>("RequestId")
                         .HasColumnType("int");
 
                     b.Property<string>("Text")
@@ -99,7 +99,9 @@ namespace CustomerSupport.DAL.Impl.Migrations
                 {
                     b.HasOne("CustomerSupport.DAL.Entities.Request", null)
                         .WithMany("Messages")
-                        .HasForeignKey("RequestId");
+                        .HasForeignKey("RequestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("CustomerSupport.DAL.Entities.Request", b =>

@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 
 using Microsoft.Extensions.DependencyInjection;
 
-using CustomerSupport.BL.Services;
 using CustomerSupport.BL.Abstract;
+using CustomerSupport.BL.Services;
+
+using CustomerSupport.BL.Services.Mapper.Abstract;
+using CustomerSupport.BL.Services.Mapper;
 
 namespace CustomerSupport.BL.Configuration
 {
@@ -18,6 +21,7 @@ namespace CustomerSupport.BL.Configuration
             services.AddScoped<ISpecialistManagementService, SpecialistManagementService>();
             services.AddScoped<IRequestManagementService, RequestManagementService>();
             services.AddScoped<IRequestInfoService, RequestManagementService>();
+            services.AddSingleton<IBLMapper, BLMapper>();
             return services;
         }
     }

@@ -9,36 +9,60 @@ using CustomerSupport.DAL.Abstract;
 using CustomerSupport.DAL.Entities;
 using CustomerSupport.BL.DTOs;
 using CustomerSupport.BL.Abstract;
-
+using CustomerSupport.BL.Services.Mapper.Abstract;
 
 namespace CustomerSupport.BL.Services
 {
     public class RequestManagementService :  IRequestManagementService
     {
         private readonly IUnitOfWork unitOfWork;
-        private readonly IMapper mapper;
-        public RequestManagementService(IUnitOfWork unitOfWork, IMapper mapper)
+        //private readonly IMapper mapper;
+        private readonly IBLMapper customMapper;
+        public RequestManagementService(IUnitOfWork unitOfWork,
+                                        /* IMapper mapper,*/ 
+                                        IBLMapper customMapper)
         {
-            this.mapper = mapper;
+         //   this.mapper = mapper;
             this.unitOfWork = unitOfWork;
+            this.customMapper = customMapper;
         }
-        public int CreateRequest(RequestDTO request)
-        {
-            request.ApplicationDate = DateTime.Now;
-            request.Messages.First().ApplicationDate = DateTime.Now;
 
-            SpecialistDTO spec = mapper.Map<SpecialistDTO>(unitOfWork.Specialists.GetTheLeastBusySpecialist());
+        public int CreateRequest(string subject, string initMessage)
+        {
+            Request request = new Request()
+            {
+                ApplicationDate = DateTime.Now,
+                Subject = subject,
+                Messages = new List<Message>() { new Message() { Text = initMessage, ApplicationDate = DateTime.Now } },
+                Status = Status.Queued
+            };
+
+            Specialist spec = unitOfWork.Specialists.GetTheLeastBusySpecialist();
             if (spec != null)
             {
-                request.Status = StatusModel.Processing;
+                request.Status = Status.Processing;
+                request.SpecialistId = spec.Id;
                 request.Specialist = spec;
-                spec.ActiveRequests.Add(request);
             }
-
-            unitOfWork.Specialists.Update(mapper.Map<Specialist>(spec));
+            unitOfWork.Requests.Add(request);
             unitOfWork.Save();
-            request.Id = unitOfWork.Requests.GetAll().Last().Id;
-            return request.Id;
+            return unitOfWork.Requests.GetLastId();
+        }
+
+        public IEnumerable<RequestDTO> GetAll(int page, int pageSize)
+        {
+            return customMapper.MapMany<RequestDTO>(unitOfWork.Requests.GetAll(page, pageSize));
+        }
+
+        public RequestDTO GetById(int id)
+        {
+            return customMapper.MapOne<RequestDTO>(unitOfWork.Requests.FindByID(id));
+        }
+
+        public void Update(RequestDTO editedRequest)
+        {          
+            unitOfWork.Requests.Update(customMapper.MapOne<Request>(editedRequest));
+            unitOfWork.Save();      
         }
 
         public void Delete(int id)
@@ -47,28 +71,9 @@ namespace CustomerSupport.BL.Services
             unitOfWork.Save();
         }
 
-        public IEnumerable<RequestDTO> GetAll()
+        public int Count()
         {
-            return mapper.Map<IEnumerable<RequestDTO>>(unitOfWork.Requests.GetAll());
-        }
-
-        public RequestDTO GetById(int id)
-        {
-            return mapper.Map<RequestDTO>(unitOfWork.Requests.GetById(id));
-        }
-
-        public void Update(RequestDTO request)
-        {
-            if (request.Specialist != null)
-            {
-                request.Specialist = mapper.Map<SpecialistDTO>(unitOfWork.Specialists.GetByIdSlim(request.Specialist.Id));
-                if (request.Status == StatusModel.Processed)
-                    request.Specialist.NumberOfProcessedRequests++;
-            }
-
-           
-            unitOfWork.Requests.Update(mapper.Map<Request>(request));
-            unitOfWork.Save();          
-        }
+            return unitOfWork.Requests.Count();
+        }      
     }
 }

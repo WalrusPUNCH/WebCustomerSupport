@@ -10,10 +10,13 @@ namespace CustomerSupport.BL.Abstract
     public interface ISpecialistManagementService
     {
         void AddSpecialist(SpecialistDTO item);
+        IEnumerable<SpecialistDTO> GetAll(int page, int pageSize);
         IEnumerable<SpecialistDTO> GetAll();
         SpecialistDTO GetSpecialistById(int id);
         void Update(SpecialistDTO item);
-        bool Delete(int id);
+        void Delete(int id);
+        int Count();
+
         IEnumerable<SpecialistDTO> GetSpecialistsWithAmountOfRequestsAboveAvarage();
         IEnumerable<SpecialistDTO> GetSpecialistsWithNoActiveRequests();
 

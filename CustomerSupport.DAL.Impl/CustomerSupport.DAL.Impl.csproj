@@ -13,6 +13,12 @@
     <Compile Remove="Migrations\20200423211318_TestMigration.Designer.cs" />
     <Compile Remove="Migrations\20200423225223_OneToManyFix.cs" />
     <Compile Remove="Migrations\20200423225223_OneToManyFix.Designer.cs" />
+    <Compile Remove="Migrations\20200424212320_ChangedSpecialistOnDeleteBehavior.cs" />
+    <Compile Remove="Migrations\20200424212320_ChangedSpecialistOnDeleteBehavior.Designer.cs" />
+    <Compile Remove="Migrations\20200508201139_TestMigration.cs" />
+    <Compile Remove="Migrations\20200508201139_TestMigration.Designer.cs" />
+    <Compile Remove="Migrations\20200509010408_addedNullableSpecialistId.cs" />
+    <Compile Remove="Migrations\20200509010408_addedNullableSpecialistId.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

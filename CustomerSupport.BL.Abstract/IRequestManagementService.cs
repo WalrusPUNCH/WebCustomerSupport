@@ -10,9 +10,10 @@ namespace CustomerSupport.BL.Abstract
 {
     public interface IRequestManagementService : IRequestInfoService
     {
-        int CreateRequest(RequestDTO request);
+        int CreateRequest(string subject, string iniMessage);
         RequestDTO GetById(int id);
         void Update(RequestDTO request);
         void Delete(int id);
+        int Count();
     }
 }

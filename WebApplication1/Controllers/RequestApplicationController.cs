@@ -12,17 +12,20 @@ using AutoMapper;
 using CustomerSupport.BL.Abstract;
 using CustomerSupport.BL.DTOs;
 using WebApplication1.Models;
+using WebApplication1.Mapper.Abstract;
+using CustomerSupport.Core.Mapper;
 
 namespace WebApplication1.Controllers
 {
     public class RequestApplicationController : Controller
     {
         private readonly IRequestManagementService requestService;
-        private readonly IMapper mapper;
-        public RequestApplicationController(IRequestManagementService requestService, IMapper mapper)
+        private readonly IPLMapper customMapper;
+        public RequestApplicationController(IRequestManagementService requestService,
+                                            IPLMapper newMapper)
         {
             this.requestService = requestService;
-            this.mapper = mapper;
+            customMapper = newMapper;
         }
         // GET: RequestApplication
         public ActionResult Index()
@@ -37,7 +40,10 @@ namespace WebApplication1.Controllers
             if (request == null)
                 return RedirectToAction(nameof(Index));
             else
-                return View(mapper.Map<RequestDetailsViewModel>(request));
+            {
+                RequestDetailsViewModel requestDetails = customMapper.MapOne<RequestDetailsViewModel>(request);
+                return View(requestDetails);
+            }
         }
 
         // GET
@@ -50,10 +56,9 @@ namespace WebApplication1.Controllers
         [HttpPost]
         public ActionResult Create(RequestViewModel requestVM)
         {
-            int requestId = requestService.CreateRequest(mapper.Map<RequestDTO>(requestVM));
+            int requestId = requestService.CreateRequest(requestVM.Subject, requestVM.InitMessage.Text);
 
             //await Response.WriteAsync($"<script language='javascript'>window.alert('Your request ID is  {requestId}');</script>");
-
             return RedirectToAction(nameof(Index));
         }
 

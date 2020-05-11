@@ -18,7 +18,8 @@ namespace WebApplication1.Models
         [Display(Name = "Статус заявки")]
         public StatusEnum Status { get; set; }
         [Display(Name = "Відповідальний спеціаліст")]
-        public SpecialistViewModel Specialist { get; set; }
+        public string SpecialistFullName { get; set; }
+        //public SpecialistViewModel Specialist { get; set; }
         [Display(Name = "Повідомлення")]
         public ICollection<MessageViewModel> Messages { get; set; }
 
