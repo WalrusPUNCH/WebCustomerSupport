@@ -6,6 +6,9 @@ using System.Threading;
 using CustomerSupport.DAL.Entities;
 using CustomerSupport.DAL.Abstract;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
+using CustomerSupport.DAL.Specifications;
+using CustomerSupport.DAL.Specifications.Abstract;
 
 namespace CustomerSupport.DAL.Impl
 {
@@ -41,18 +44,25 @@ namespace CustomerSupport.DAL.Impl
             IEnumerable<Specialist> specialists = context.Specialists.Where(spec => spec.NumberOfProcessedRequests > averageAmount).ToList();
             return specialists;
         }
-        IEnumerable<Specialist> ISpecialistRepository.GetSpecialistsWithNoActiveRequests()
-        {
-            if (context.Specialists.Count() == 0)
-                return null;
-            IEnumerable<Specialist> specialists = context.Specialists.Where(spec => spec.ActiveRequests.Count == 0).ToList();
-            return specialists;
-        }
+        //IEnumerable<Specialist> ISpecialistRepository.GetSpecialistsWithNoActiveRequests()
+        //{
+        //    if (context.Specialists.Count() == 0)
+        //        return null;
+        //    IEnumerable<Specialist> specialists = context.Specialists.Where(spec => spec.ActiveRequests.Count == 0).ToList();
+        //    return specialists;
+        //}
         public Specialist GetTheLeastBusySpecialist()
         {
             if (context.Specialists.Count() == 0)
                 return null;
             return context.Specialists.OrderBy(item => item.ActiveRequests.Count).ThenBy(item => item.NumberOfProcessedRequests).First();
+        }
+
+        public IEnumerable<Specialist> GetFiltered(ISpecification<Specialist> filter)
+        {
+            if (context.Specialists.Count() == 0)
+                return null;
+            return context.Specialists.Where(filter.Criteria).AsEnumerable();
         }
     }
 }

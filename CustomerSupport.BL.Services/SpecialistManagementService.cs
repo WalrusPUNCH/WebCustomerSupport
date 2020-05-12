@@ -11,6 +11,7 @@ using CustomerSupport.BL.DTOs;
 using CustomerSupport.BL.Abstract;
 using System.Linq;
 using CustomerSupport.BL.Services.Mapper.Abstract;
+using CustomerSupport.DAL.Specifications;
 
 namespace CustomerSupport.BL.Services
 {
@@ -70,7 +71,8 @@ namespace CustomerSupport.BL.Services
 
         public IEnumerable<SpecialistDTO> GetSpecialistsWithNoActiveRequests()
         {
-            return customMapper.MapMany<SpecialistDTO>(unitOfWork.Specialists.GetSpecialistsWithNoActiveRequests());
+            return customMapper.MapMany<SpecialistDTO>(unitOfWork.Specialists.GetFiltered(new SpecialistsWithNoActiveRequestsSpecification()));
+           // return customMapper.MapMany<SpecialistDTO>(unitOfWork.Specialists.GetSpecialistsWithNoActiveRequests());
         }
     }
 }

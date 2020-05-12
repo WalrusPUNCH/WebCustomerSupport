@@ -29,6 +29,7 @@
   <ItemGroup>
     <ProjectReference Include="..\CustomerSupport.DAL.Abstract\CustomerSupport.DAL.Abstract.csproj" />
     <ProjectReference Include="..\CustomerSupport.DAL.Entities\CustomerSupport.DAL.Entities.csproj" />
+    <ProjectReference Include="..\CustomerSupport.DAL.Specifications\CustomerSupport.DAL.Specifications.csproj" />
   </ItemGroup>
 
 </Project>

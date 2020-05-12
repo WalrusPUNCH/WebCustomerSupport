@@ -13,6 +13,7 @@
     <ProjectReference Include="..\CustomerSupport.BL.DTOs\CustomerSupport.BL.DTOs.csproj" />
     <ProjectReference Include="..\CustomerSupport.Core.Mapper\CustomerSupport.Core.Mapper.csproj" />
     <ProjectReference Include="..\CustomerSupport.DAL.Abstract\CustomerSupport.DAL.Abstract.csproj" />
+    <ProjectReference Include="..\CustomerSupport.DAL.Specifications\CustomerSupport.DAL.Specifications.csproj" />
   </ItemGroup>
 
 </Project>
