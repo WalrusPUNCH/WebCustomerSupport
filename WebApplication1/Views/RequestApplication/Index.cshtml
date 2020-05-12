@@ -22,3 +22,12 @@
         <input type="submit" value="Пошук" />
     </p>
 }
+
+@if (String.IsNullOrEmpty(ViewBag.RequestId) == false)
+{
+    <script type="text/javascript">
+        window.onload = function () {
+            alert(@ViewBag.RequestId);
+        }
+    </script>
+}

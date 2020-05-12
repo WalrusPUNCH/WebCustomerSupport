@@ -28,8 +28,9 @@ namespace WebApplication1.Controllers
             customMapper = newMapper;
         }
         // GET: RequestApplication
-        public ActionResult Index()
+        public ActionResult Index(int? lastRequestId)
         {
+            ViewBag.RequestId = lastRequestId.ToString();
             return View();
         }
 
@@ -57,9 +58,8 @@ namespace WebApplication1.Controllers
         public ActionResult Create(RequestViewModel requestVM)
         {
             int requestId = requestService.CreateRequest(requestVM.Subject, requestVM.InitMessage.Text);
-
-            //await Response.WriteAsync($"<script language='javascript'>window.alert('Your request ID is  {requestId}');</script>");
-            return RedirectToAction(nameof(Index));
+           // await Response.WriteAsync($"<script language='javascript'>window.alert('Your request ID is  {requestId}');</script>");
+            return RedirectToAction(nameof(Index), new { lastRequestId = requestId });
         }
 
         // GET

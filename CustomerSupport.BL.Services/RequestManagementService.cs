@@ -46,7 +46,8 @@ namespace CustomerSupport.BL.Services
             }
             unitOfWork.Requests.Add(request);
             unitOfWork.Save();
-            return unitOfWork.Requests.GetLastId();
+            return request.Id;
+            //return unitOfWork.Requests.GetLastId();
         }
 
         public IEnumerable<RequestDTO> GetAll(int page, int pageSize)
