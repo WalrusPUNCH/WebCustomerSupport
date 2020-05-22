@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+
+using Microsoft.EntityFrameworkCore;
 
 using CustomerSupport.DAL.Abstract;
-using CustomerSupport.DAL.Entities;
-using Microsoft.EntityFrameworkCore;
+using CustomerSupport.DAL.Specifications.Abstract;
 
 namespace CustomerSupport.DAL.Impl
 {
-    public class BaseRepository<TEntity>:  IBaseRepository<TEntity> where TEntity: HasID
+    public class BaseRepository<TKey, TEntity>: IBaseRepository<TKey, TEntity> where TEntity: class
     {
         private readonly CustomerSupportContext context;
         private DbSet<TEntity> set;
@@ -18,7 +18,10 @@ namespace CustomerSupport.DAL.Impl
             get
             {
                 if (set == null)
-                    return context.Set<TEntity>();
+                {
+                    set =  context.Set<TEntity>();
+                    return set;
+                }
                 else
                     return set;
             }
@@ -33,7 +36,7 @@ namespace CustomerSupport.DAL.Impl
             DBSet.Add(item); 
         }
 
-        public virtual void Delete(int id)
+        public virtual void Delete(TKey id)
         {
             TEntity item = FindByID(id);
             if (item != null)
@@ -49,7 +52,7 @@ namespace CustomerSupport.DAL.Impl
             return DBSet;
         }
 
-        public virtual TEntity FindByID(int id)
+        public virtual TEntity FindByID(TKey id)
         {
             return DBSet.Find(id);
         }
@@ -62,6 +65,16 @@ namespace CustomerSupport.DAL.Impl
         public virtual int Count()
         {
             return DBSet.Count();
+        }
+
+        public IEnumerable<TEntity> GetFiltered(ISpecification<TEntity> filter)
+        {
+            if (DBSet.Count() == 0)
+                return null;
+
+            var queryableResultWithIncludes = filter.Includes.Aggregate(DBSet.AsQueryable(),
+           (current, include) => current.Include(include));
+            return queryableResultWithIncludes.Where(filter.Criteria).AsEnumerable();
         }
     }
 }

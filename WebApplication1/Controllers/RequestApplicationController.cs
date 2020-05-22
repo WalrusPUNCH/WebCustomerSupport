@@ -3,29 +3,29 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
+
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 
-using AutoMapper;
 
 using CustomerSupport.BL.Abstract;
 using CustomerSupport.BL.DTOs;
 using WebApplication1.Models;
-using WebApplication1.Mapper.Abstract;
-using CustomerSupport.Core.Mapper;
+using WebApplication1.Web.Mapper.Abstract;
 
 namespace WebApplication1.Controllers
 {
     public class RequestApplicationController : Controller
     {
         private readonly IRequestManagementService requestService;
-        private readonly IPLMapper customMapper;
+
+        private readonly IMapTo<RequestDTO, RequestDetailsViewModel> requestMapper;
         public RequestApplicationController(IRequestManagementService requestService,
-                                            IPLMapper newMapper)
+                                            IMapTo<RequestDTO, RequestDetailsViewModel> requestMapper)
         {
             this.requestService = requestService;
-            customMapper = newMapper;
+            this.requestMapper = requestMapper;
         }
         // GET: RequestApplication
         public ActionResult Index(int? lastRequestId)
@@ -42,7 +42,7 @@ namespace WebApplication1.Controllers
                 return RedirectToAction(nameof(Index));
             else
             {
-                RequestDetailsViewModel requestDetails = customMapper.MapOne<RequestDetailsViewModel>(request);
+                RequestDetailsViewModel requestDetails = requestMapper.MapTo(request);
                 return View(requestDetails);
             }
         }
@@ -84,28 +84,5 @@ namespace WebApplication1.Controllers
                 return View();
             }
         }
-
-        // GET
-        //public ActionResult Delete(int id)
-        //{
-        //    return View();
-        //}
-
-        // POST: RequestApplication/Delete/5
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Delete(int id, IFormCollection collection)
-        //{
-        //    try
-        //    {
-        //         TODO: Add delete logic here
-
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    catch
-        //    {
-        //        return View();
-        //    }
-        //}
     }
 }

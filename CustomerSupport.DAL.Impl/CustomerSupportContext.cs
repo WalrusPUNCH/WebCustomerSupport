@@ -18,7 +18,7 @@ namespace CustomerSupport.DAL.Impl
 
         public CustomerSupportContext(DbContextOptions<CustomerSupportContext> options) : base(options)
         {
-           // Database.EnsureCreated();
+
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) => optionsBuilder

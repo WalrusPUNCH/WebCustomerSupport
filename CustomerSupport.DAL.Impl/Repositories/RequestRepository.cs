@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading;
+using System.Linq;
+
+using Microsoft.EntityFrameworkCore;
 
 using CustomerSupport.DAL.Entities;
 using CustomerSupport.DAL.Abstract;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
 
 namespace CustomerSupport.DAL.Impl
 {
-    public class RequestRepository : BaseRepository<Request>, IRequestRepository
+    public class RequestRepository : BaseRepository<int, Request>, IRequestRepository
     {
         private readonly CustomerSupportContext context;
         public RequestRepository(CustomerSupportContext context) : base(context)
@@ -29,7 +29,7 @@ namespace CustomerSupport.DAL.Impl
         }
         public override IEnumerable<Request> GetAll(int page, int pageSize)
         {
-            return context.Requests.Include(rq => rq.Specialist).GetPaged(page, pageSize).ToList();
+            return context.Requests.Include(rq => rq.Specialist).Include(rq => rq.Messages).GetPaged(page, pageSize).ToList();
         }
         public override IEnumerable<Request> GetAll()
         {
@@ -40,11 +40,6 @@ namespace CustomerSupport.DAL.Impl
         public override Request FindByID(int id)
         {
             return context.Requests.Include(r => r.Messages).Include(r => r.Specialist).FirstOrDefault(req => req.Id == id);        
-        }
-
-        public int GetLastId()
-        {
-            return 8; // context.Requests.LastOrDefault().Id;
         }
     }
 }

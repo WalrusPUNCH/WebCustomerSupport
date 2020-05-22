@@ -1,8 +1,9 @@
 ﻿using System;
-using CustomerSupport.DAL.Specifications.Abstract;
-using CustomerSupport.DAL.Entities;
 using System.Linq.Expressions;
 using System.Linq;
+
+using CustomerSupport.DAL.Specifications.Abstract;
+using CustomerSupport.DAL.Entities;
 
 namespace CustomerSupport.DAL.Specifications
 {

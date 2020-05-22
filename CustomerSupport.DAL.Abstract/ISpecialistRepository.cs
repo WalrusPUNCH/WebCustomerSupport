@@ -6,9 +6,9 @@ using CustomerSupport.DAL.Specifications.Abstract;
 
 namespace CustomerSupport.DAL.Abstract
 {
-    public interface ISpecialistRepository : IBaseRepository<Specialist>
+    public interface ISpecialistRepository : IBaseRepository<int, Specialist>
     {
-        IEnumerable<Specialist> GetFiltered(ISpecification<Specialist> filter);
+       // IEnumerable<Specialist> GetFiltered(ISpecification<Specialist> filter);
         Specialist GetTheLeastBusySpecialist();
         IEnumerable<Specialist> GetSpecialistsWithAmountOfRequestsAboveAvarage(); // add paging
        // IEnumerable<Specialist> GetSpecialistsWithNoActiveRequests(); // add paging

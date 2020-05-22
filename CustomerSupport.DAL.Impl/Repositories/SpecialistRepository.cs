@@ -12,7 +12,7 @@ using CustomerSupport.DAL.Specifications.Abstract;
 
 namespace CustomerSupport.DAL.Impl
 {
-    public class SpecialistRepository : BaseRepository<Specialist>, ISpecialistRepository
+    public class SpecialistRepository : BaseRepository<int, Specialist>, ISpecialistRepository
     {
         private readonly CustomerSupportContext context;
         public SpecialistRepository(CustomerSupportContext context) : base(context)
@@ -28,14 +28,7 @@ namespace CustomerSupport.DAL.Impl
             var specialists = context.Specialists.Include(s => s.ActiveRequests).GetPaged(page, pageSize).ToList();
             return specialists;
         }
-        public override void Delete(int id)
-        {
-            Specialist specialist = context.Specialists/*.Include(s => s.ActiveRequests)*/.FirstOrDefault(spec => spec.Id == id);
-            if (specialist != null)
-            {
-                context.Specialists.Remove(specialist);
-            }
-        }
+
         public IEnumerable<Specialist> GetSpecialistsWithAmountOfRequestsAboveAvarage()
         {
             if (context.Specialists.Count() == 0)
@@ -44,13 +37,7 @@ namespace CustomerSupport.DAL.Impl
             IEnumerable<Specialist> specialists = context.Specialists.Where(spec => spec.NumberOfProcessedRequests > averageAmount).ToList();
             return specialists;
         }
-        //IEnumerable<Specialist> ISpecialistRepository.GetSpecialistsWithNoActiveRequests()
-        //{
-        //    if (context.Specialists.Count() == 0)
-        //        return null;
-        //    IEnumerable<Specialist> specialists = context.Specialists.Where(spec => spec.ActiveRequests.Count == 0).ToList();
-        //    return specialists;
-        //}
+        
         public Specialist GetTheLeastBusySpecialist()
         {
             if (context.Specialists.Count() == 0)
@@ -58,11 +45,32 @@ namespace CustomerSupport.DAL.Impl
             return context.Specialists.OrderBy(item => item.ActiveRequests.Count).ThenBy(item => item.NumberOfProcessedRequests).First();
         }
 
-        public IEnumerable<Specialist> GetFiltered(ISpecification<Specialist> filter)
-        {
-            if (context.Specialists.Count() == 0)
-                return null;
-            return context.Specialists.Where(filter.Criteria).AsEnumerable();
-        }
+        //public IEnumerable<Specialist> GetFiltered(ISpecification<Specialist> filter)
+        //{
+        //    if (context.Specialists.Count() == 0)
+        //        return null;
+
+        //    var queryableResultWithIncludes = filter.Includes.Aggregate(context.Specialists.AsQueryable(),
+        //   (current, include) => current.Include(include));         
+        //    return queryableResultWithIncludes.Where(filter.Criteria).AsEnumerable();
+        //}
+
+
+        //public override void Delete(int id)
+        //{
+        //    Specialist specialist = context.Specialists/*.Include(s => s.ActiveRequests)*/.FirstOrDefault(spec => spec.Id == id);
+        //    if (specialist != null)
+        //    {
+        //        context.Specialists.Remove(specialist);
+        //    }
+        //}
+
+        //IEnumerable<Specialist> ISpecialistRepository.GetSpecialistsWithNoActiveRequests()
+        //{
+        //    if (context.Specialists.Count() == 0)
+        //        return null;
+        //    IEnumerable<Specialist> specialists = context.Specialists.Where(spec => spec.ActiveRequests.Count == 0).ToList();
+        //    return specialists;
+        //}
     }
 }

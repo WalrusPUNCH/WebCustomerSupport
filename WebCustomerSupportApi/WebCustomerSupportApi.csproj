@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CustomerSupport.BL.Abstract\CustomerSupport.BL.Abstract.csproj" />
+    <ProjectReference Include="..\CustomerSupport.BL.DTOs\CustomerSupport.BL.DTOs.csproj" />
+    <ProjectReference Include="..\CustomerSupport.BL.Services\CustomerSupport.BL.Services.csproj" />
+    <ProjectReference Include="..\CustomerSupport.DAL.Impl\CustomerSupport.DAL.Impl.csproj" />
+  </ItemGroup>
+
+
+</Project>

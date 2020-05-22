@@ -12,6 +12,7 @@ namespace CustomerSupport.BL.Abstract
     {
         int CreateRequest(string subject, string iniMessage);
         RequestDTO GetById(int id);
+        IEnumerable<RequestDTO> GetAllWithDetails();
         void Update(RequestDTO request);
         void Delete(int id);
         int Count();

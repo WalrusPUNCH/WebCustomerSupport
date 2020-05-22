@@ -5,8 +5,8 @@ using CustomerSupport.DAL.Entities;
 
 namespace CustomerSupport.DAL.Abstract
 {
-    public interface IRequestRepository : IBaseRepository<Request>
+    public interface IRequestRepository : IBaseRepository<int, Request>
     {
-        int GetLastId();
+
     }
 }
